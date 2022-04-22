@@ -3,9 +3,13 @@ let
     nixLib = inputs.nixpkgs.lib;
     inherit (nixLib) fix;
 in fix (self: let
+    pkgs = import inputs.nixpkgs {
+        system = "x86_64-linux";
+    };
+
     f = path: import path ({
         lib = self;
-        inherit inputs;
+        inherit inputs pkgs;
     } // inputs);
 in nixLib // (rec {
     attrs = f ./attrs.nix;
@@ -16,6 +20,7 @@ in nixLib // (rec {
     # custom stuff
     objects = {
         addrs = f ./objects/addrs.nix;
+        kube = f ./objects/kube.nix;
     };
 
     ansi = f ./ansi.nix;
