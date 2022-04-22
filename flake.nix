@@ -1,6 +1,6 @@
 {
     description = "XTended Nix Library";
-    inputs.nixlib.url = "github:nix-community/nixpkgs.lib";
+    inputs.nixpkgs.url = "nixpkgs/nixos-21.11";
 
     outputs = inputs@{ self, ... }: {
         lib = import ./lib {

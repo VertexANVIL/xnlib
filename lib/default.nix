@@ -1,15 +1,13 @@
 { inputs, ... }:
 let
-    nixLib = inputs.nixlib.lib;
+    nixLib = inputs.nixpkgs.lib;
     inherit (nixLib) fix;
-in fix (self: { inputs ? {}, extender ? {} }@all: let
-    # construct internal lib
-    lib = nixLib // (self all);
-
+in fix (self: let
     f = path: import path ({
-        inherit lib inputs;
+        lib = self;
+        inherit inputs;
     } // inputs);
-in rec {
+in nixLib // (rec {
     attrs = f ./attrs.nix;
     lists = f ./lists.nix;
     importers = f ./importers.nix;
@@ -23,20 +21,6 @@ in rec {
     ansi = f ./ansi.nix;
     systemd = f ./systemd.nix;
 
-    # extends with a custom lib
-    extend = attrs: self (all // {
-        extender = extender // attrs;
-    });
-
-    extendByPath = path: extend (
-        import path { inherit lib; }
-    );
-
-    # overrides with custom imports
-    override = inputs: self (all // {
-        inherit inputs;
-    });
-
     inherit (attrs) mapFilterAttrs genAttrs' attrCount defaultAttrs defaultSetAttrs
         imapAttrsToList recursiveMerge recursiveMergeAttrsWithNames recursiveMergeAttrsWith;
     inherit (lists) filterListNonEmpty;
@@ -44,4 +28,4 @@ in rec {
     inherit (misc) optionalPath optionalPathImport isIPv6 tryEval';
 
     inherit (objects.addrs) addrOpts addrToString addrToOpts addrsToOpts;
-} // extender) {}
+}))
