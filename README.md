@@ -18,3 +18,7 @@ This is an extended version of the NixOS library shared by a bunch of repositori
 | `recImportDirs` | Recursively imports directories |
 | `nixFilesIn` | Converts nix files in directory to name/value pairs |
 | `filterListNonEmpty` | Filters out empty strings and null objects from a list |
+| `optionalPath` | If path exists, evaluate expr with it, otherwise return a default |
+| `optionalPathImport` | If path exists, import it, otherwise return a default |
+| `isIPv6` | Determines whether a given address is IPv6 or not |
+| `tryEval'` | Like `tryEval`, but recursive. |
