@@ -14,6 +14,7 @@ in fix (self: let
 in nixLib // (rec {
     attrs = f ./attrs.nix;
     lists = f ./lists.nix;
+    generators = f ./generators.nix;
     importers = f ./importers.nix;
     misc = f ./misc.nix;
 
@@ -28,6 +29,7 @@ in nixLib // (rec {
     inherit (attrs) mapFilterAttrs genAttrs' attrCount defaultAttrs defaultSetAttrs
         imapAttrsToList recursiveMerge recursiveMergeAttrsWithNames recursiveMergeAttrsWith;
     inherit (lists) filterListNonEmpty;
+    inherit (generators) mkProfileAttrs;
     inherit (importers) pathsToImportedAttrs recImportFiles recImportDirs nixFilesIn;
     inherit (misc) optionalPath optionalPathImport isIPv6 tryEval';
 
