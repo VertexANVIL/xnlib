@@ -1,10 +1,12 @@
 { inputs, ... }:
 let
+    inherit (builtins) currentSystem;
+
     nixLib = inputs.nixpkgs.lib;
     inherit (nixLib) fix;
 in fix (self: let
     pkgs = import inputs.nixpkgs {
-        system = "x86_64-linux";
+        system = currentSystem;
     };
 
     f = path: import path ({
@@ -30,7 +32,7 @@ in nixLib // (rec {
         imapAttrsToList recursiveMerge recursiveMergeAttrsWithNames recursiveMergeAttrsWith;
     inherit (lists) filterListNonEmpty;
     inherit (generators) mkProfileAttrs;
-    inherit (importers) pathsToImportedAttrs recImportFiles recImportDirs nixFilesIn;
+    inherit (importers) pathsToImportedAttrs recursiveModuleTraverse recImportFiles recImportDirs nixFilesIn;
     inherit (misc) optionalPath optionalPathImport isIPv6 tryEval';
 
     inherit (objects.addrs) addrOpts addrToString addrToOpts addrsToOpts;
