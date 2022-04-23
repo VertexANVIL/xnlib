@@ -20,7 +20,6 @@ in nixLib // (rec {
     # custom stuff
     objects = {
         addrs = f ./objects/addrs.nix;
-        kube = f ./objects/kube.nix;
     };
 
     ansi = f ./ansi.nix;
