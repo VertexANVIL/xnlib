@@ -1,6 +1,5 @@
-{ inputs, ... }:
+{ inputs, ... }: base:
 let
-    base = inputs.nixpkgs.lib;
     inherit (base) recursiveUpdate;
 in base.extend (self: super: let
     pkgs = import inputs.nixpkgs {
