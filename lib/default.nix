@@ -1,19 +1,17 @@
 { inputs, ... }:
 let
-    inherit (builtins) currentSystem;
-
-    nixLib = inputs.nixpkgs.lib;
-    inherit (nixLib) fix;
-in fix (self: let
+    base = inputs.nixpkgs.lib;
+    inherit (base) recursiveUpdate;
+in base.extend (self: super: let
     pkgs = import inputs.nixpkgs {
-        system = currentSystem;
+        system = "x86_64-linux";
     };
 
-    f = path: import path ({
+    f = path: import path {
         lib = self;
         inherit inputs pkgs;
-    } // inputs);
-in nixLib // (rec {
+    };
+in recursiveUpdate super (rec {
     attrs = f ./attrs.nix;
     lists = f ./lists.nix;
     generators = f ./generators.nix;
