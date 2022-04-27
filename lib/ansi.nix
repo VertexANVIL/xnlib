@@ -63,6 +63,9 @@ in (mapAttrsRecursive (_: v: "\\033[${toString v}m") codes) // {
     # Compiles colour codes to their actual characters
     compile = text: let
         file = pkgs.writeText "ansi-compile" text;
-        result = pkgs.runCommand "ansi-compile" {} ''echo -e "$(cat ${file})" > $out'';
+        result = pkgs.runCommand "ansi-compile" {
+            preferLocalBuild = true;
+            allowSubstitutes = false;
+        } ''echo -e "$(cat ${file})" > $out'';
     in readFile result;
 }
