@@ -1,6 +1,6 @@
 { lib, ... }:
 let
-    inherit (builtins) filter readDir;
+    inherit (builtins) filter readDir unsafeDiscardStringContext;
     inherit (lib) hasSuffix removeSuffix nameValuePair pathExists
         optional flatten filterAttrs mapAttrs' genAttrs' mapFilterAttrs attrNames;
 in rec {
@@ -11,7 +11,7 @@ in rec {
         paths' = filter (hasSuffix ".nix") paths;
     in
         genAttrs' paths' (path: {
-            name = removeSuffix ".nix" (baseNameOf path);
+            name = removeSuffix ".nix" (baseNameOf (unsafeDiscardStringContext path));
             value = import path;
         });
 
