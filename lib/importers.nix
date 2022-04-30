@@ -21,7 +21,7 @@ in rec {
         folders = attrNames (filterAttrs (n: v: v == "directory") (readDir dir));
         results = flatten (map (d: recursiveModuleTraverse (dir + "/${d}")) folders);
         default = dir + "/default.nix";
-    in (optional (pathExists default) [(import default)]) ++ results;
+    in (optional (pathExists default) [default]) ++ results;
 
     # !!! NOT ACTUALLY RECURSIVE! Just imports all nix files in a dir
     recImportFiles = { dir, _import }:
