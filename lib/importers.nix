@@ -32,9 +32,11 @@ in rec {
         ) (readDir dir);
 
     # !!! NOT ACTUALLY RECURSIVE! Just imports all dirs in a dir
-    recImportDirs = { dir, _import }:
-        mapFilterAttrs (_: v: v != null) (n: v:
-            if v == "directory" then nameValuePair n (_import n)
+    recImportDirs = { dir, _import, nameModifier ? null }:
+        mapFilterAttrs (_: v: v != null) (n: v: let
+            name = if nameModifier != null then nameModifier n else n;
+        in
+            if v == "directory" then nameValuePair name (_import n)
             else nameValuePair ("") (null)
         ) (readDir dir);
 
